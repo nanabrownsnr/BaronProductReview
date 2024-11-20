@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List
@@ -6,6 +7,7 @@ from linkedin import scrape_linkedin
 from twitter import scrape_twitter
 from reddit import scrape_reddit
 from fastapi.responses import FileResponse
+import uvicorn
 
 # Initialize FastAPI app
 app = FastAPI(title = "Virtual Pulse Analyzer")
@@ -44,4 +46,16 @@ async def generate_daily_report(request: AnalysisRequest):
 
     # Return the file as a response
     return FileResponse(file_path, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename="results.xlsx")
+
+
+if __name__ == '__main__':
+
+    port = int(os.environ.get('PORT', 10000))
+
+    uvicorn.run(
+        "main:app",  # Replace "main" with the module name where your app is defined
+        host="0.0.0.0",
+        port=port,  # Replace port with your desired port number
+        reload=True  # Optional: Enables automatic reloading on file changes
+    )
 
