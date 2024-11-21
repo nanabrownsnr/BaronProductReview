@@ -9,7 +9,7 @@ import streamlit as st
 @st.cache_resource
 def load_models():
     # Model 1
-    emotion_classifier = pipeline(task="text-classification", model="SamLowe/roberta-base-go_emotions", top_k=None)
+    # emotion_classifier = pipeline(task="text-classification", model="SamLowe/roberta-base-go_emotions", top_k=None)
     # Model 2
     model_path = "cardiffnlp/twitter-roberta-base-sentiment-latest"
     tokenizer = AutoTokenizer.from_pretrained(model_path)
@@ -18,40 +18,39 @@ def load_models():
     # Model 3
     category_classifier = pipeline("zero-shot-classification", model="MoritzLaurer/deberta-v3-large-zeroshot-v2.0")
 
-    # Model 4 -identify source language
-    language_classifier = pipeline("zero-shot-classification", model="MoritzLaurer/deberta-v3-large-zeroshot-v2.0")
+    # # Model 4 -identify source language
+    # language_classifier = pipeline("zero-shot-classification", model="MoritzLaurer/deberta-v3-large-zeroshot-v2.0")
 
-    # Model 5 -translate from source language to english
-    language_transformer = pipeline("zero-shot-classification", model="MoritzLaurer/deberta-v3-large-zeroshot-v2.0")
-    return emotion_classifier,sentiment_classifier,category_classifier,language_classifier,language_transformer
-
-
-
-emotion_classifier,sentiment_classifier,category_classifier,language_classifier,language_transformer = load_models()
+    # # Model 5 -translate from source language to english
+    # language_transformer = pipeline("zero-shot-classification", model="MoritzLaurer/deberta-v3-large-zeroshot-v2.0")
+    return sentiment_classifier,category_classifier
 
 
-def determine_translation(text):
-    try:
-        response1 = language_classifier(text)
-        response2 =language_transformer(text, response1)
-        result = response2.json()
-    except (json.JSONDecodeError, IndexError, KeyError, ValueError) as e:
-        print(f"Error processing emotion: {e}")
-        result = "Failed"
-    return result
+sentiment_classifier,category_classifier = load_models()
 
-def determine_emotion(text):
-    try:
-        response = emotion_classifier(text)
-        if response and len(response) > 0:
-            result = response[0][0]['label']
-            # print("emotion result:", result)
-        else:
-            raise ValueError("Invalid JSON response format")
-    except (json.JSONDecodeError, IndexError, KeyError, ValueError) as e:
-        print(f"Error processing emotion: {e}")
-        result = "Failed"
-    return result
+
+# def determine_translation(text):
+#     try:
+#         response1 = language_classifier(text)
+#         response2 =language_transformer(text, response1)
+#         result = response2.json()
+#     except (json.JSONDecodeError, IndexError, KeyError, ValueError) as e:
+#         print(f"Error processing emotion: {e}")
+#         result = "Failed"
+#     return result
+
+# def determine_emotion(text):
+#     try:
+#         response = emotion_classifier(text)
+#         if response and len(response) > 0:
+#             result = response[0][0]['label']
+#             # print("emotion result:", result)
+#         else:
+#             raise ValueError("Invalid JSON response format")
+#     except (json.JSONDecodeError, IndexError, KeyError, ValueError) as e:
+#         print(f"Error processing emotion: {e}")
+#         result = "Failed"
+#     return result
 
 def determine_sentiment(text):
     try:

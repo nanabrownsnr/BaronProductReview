@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from cognitives import determine_sentiment, determine_category, determine_emotion
+from cognitives import determine_sentiment, determine_category
 import datetime
 import tempfile
 
@@ -16,9 +16,9 @@ def process_data(source,texts,categories):
         platform = source
         # cleaned_text = determine_translation(text)
         sentiment = determine_sentiment(text)
-        emotion = determine_emotion(text)
+        # emotion = determine_emotion(text)
         category = determine_category(text,categories)
-        data.append([platform,text,sentiment,category,emotion])
+        data.append([platform,text,sentiment,category])
     end = datetime.datetime.now()
     print("end: ", end)
     print(data)
@@ -27,7 +27,7 @@ def process_data(source,texts,categories):
     return data
 
 def create_excel_report(data):
-    df = pd.DataFrame(data, columns=["Platform","Text", "Sentiment","Category","Emotion"])
+    df = pd.DataFrame(data, columns=["Platform","Text", "Sentiment","Category"])
     
     df.to_excel("results.xlsx", index=False)
     print("File saved")
