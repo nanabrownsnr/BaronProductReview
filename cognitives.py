@@ -2,9 +2,7 @@ from transformers import pipeline
 from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
 import numpy as np
 import json
-import streamlit as st
 
-@st.cache_resource
 def load_models():
     model_path = "cardiffnlp/twitter-roberta-base-sentiment-latest"
     tokenizer = AutoTokenizer.from_pretrained(model_path)
@@ -19,7 +17,6 @@ def load_models():
 sentiment_classifier,category_classifier = load_models()
 
 
-@st.cache_resource
 def determine_sentiment(text):
     try:
         response = sentiment_classifier(text)
@@ -33,7 +30,6 @@ def determine_sentiment(text):
         result = "Failed"
     return result
 
-@st.cache_resource
 def determine_category(text,categories):
     try:
         response = category_classifier(text,categories)
