@@ -2,7 +2,7 @@ import requests
 from decouple import config
 import json
 import datetime
-# rapidapi_api_key = config('RAPIDAPI_API_KEY')
+
 rapidapi_api_key = "da90478b31msh812ee13e13f28e3p11a732jsna744fe4675ae"
 now = datetime.datetime.now().strftime("%Y-%m-%d")
 
@@ -46,8 +46,3 @@ def scrape_twitter(keyword):
         print(f"Error obtaining twitter posts: {e}")
         
     return item_texts
-
-
-
-# # Test Usage
-# post_texts = scrape_twitter("Haaland")
